@@ -1,50 +1,54 @@
-# Welcome to your Expo app 👋
+This document explains the overall composition and architecture of the **MyPetLibrary** project to help you clearly understand its structure and operation.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+## **1. Project Overview**
 
-1. Install dependencies
+**MyPetLibrary** is a cross-platform mobile application based on React Native. Through this app, users can get name recommendations for their pets and save the pet's photo and related memos to create their own 'Pet Library'.
 
-   ```bash
-   npm install
-   ```
+*   **Core Technologies:**
+    *   **Frontend:** React Native
+    *   **Backend (BaaS):** Google Firebase
 
-2. Start the app
+This structure allows for the simultaneous development of iOS and Android apps with a single JavaScript codebase and maximizes development efficiency by leveraging the powerful backend services provided by Firebase instead of building a server infrastructure from scratch.
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## **2. Project Structure (`/src` folder)**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+All of the project's core logic is located within the `/src` folder, and each directory has a clearly defined role according to its function. This 'Separation of Concerns' principle improves code readability and makes maintenance easier.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+*   **/screens:** Stores components corresponding to each page (screen) of the app. (e.g., `HomeScreen`, `LibraryScreen`)
+*   **/components:** Manages small, reusable UI unit components such as buttons, cards, and input fields that are used across multiple screens.
+*   **/navigation:** Defines and manages the navigation flow (routing) between screens within the app using the React Navigation library.
+*   **/services:** Handles all communication logic with Firebase. Functions for fetching information from the database or uploading photos to storage are located here.
+*   **/assets:** Stores static resources used in the app, such as logo images, icons, and custom fonts.
+*   **/constants:** Defines constant values that are used consistently throughout the app (e.g., theme color codes, API URLs).
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## **3. Data Flow and Backend Architecture**
 
-```bash
-npm run reset-project
-```
+The app's data moves organically between the user's device and the Firebase backend.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1.  **Name/Memo Data (Firestore):**
+    *   A vast list of 'recommended names' used in the app is pre-stored in the **Firestore database**.
+    *   The names and memo texts of pets that users save in their library are also systematically recorded in Firestore. Each pet's information is saved as a single 'Document'.
 
-## Learn more
+2.  **Photo Files (Firebase Storage):**
+    *   Photo files taken by the user or selected from the gallery are uploaded directly to **Firebase Storage**. Storage is specifically designed for storing large files.
 
-To learn more about developing your project with Expo, look at the following resources:
+3.  **Integrated Data Flow:**
+    *   **When saving:** When a user saves a photo and a memo, ① the photo file is uploaded to **Storage**, and ② a unique download URL for the uploaded file is generated. ③ This URL address is recorded in a document in the **Firestore** database along with the animal's name and memo text.
+    *   **When viewing:** The library screen fetches the list of documents from Firestore. It displays the pet's information and image on the screen using the name, memo, and photo URL stored in each document.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## **4. Main Libraries and Roles**
 
-Join our community of developers creating universal apps.
+*   **React Native:** As the core framework, it allows you to build native mobile apps (iOS, Android) using JavaScript and React concepts.
+*   **React Navigation:** An essential library for managing screen transitions in the app. It controls the entire experience of a user moving to another page by pressing a button.
+*   **React Native Firebase:** Acts as a bridge connecting the React Native app with Firebase services. Through this library, you can call all the functions of Firestore and Storage from the app.
+*   **(TBD) Image Picker / Camera:** Community libraries like `react-native-image-picker` will be used to activate the user's camera or access the album.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+As such, the **MyPetLibrary** project is designed based on a modern and efficient technology stack and a systematic structure. This solid foundation will help to flexibly cope with adding new features or expanding services in the future.
