@@ -1,54 +1,102 @@
-This document explains the overall composition and architecture of the **MyPetLibrary** project to help you clearly understand its structure and operation.
+# MyPetLibrary
 
----
+MyPetLibrary is a mobile application built with React Native and Expo that helps you find the perfect name for your new pet, save their details, and keep a library of all your beloved companions.
 
-## **1. Project Overview**
+## Features
 
-**MyPetLibrary** is a cross-platform mobile application based on React Native. Through this app, users can get name recommendations for their pets and save the pet's photo and related memos to create their own 'Pet Library'.
+- **Name Suggestion**: Get random name suggestions for cats, dogs, or other pets.
+- **Add Pet Details**: Save your favorite suggested names along with a photo and a memo.
+- **Pet Library**: View a collection of all your saved pets.
+- **Intuitive Navigation**: Easy switching between Home and Library screens using a tab bar.
 
-*   **Core Technologies:**
-    *   **Frontend:** React Native
-    *   **Backend (BaaS):** Google Firebase
+## Installation
 
-This structure allows for the simultaneous development of iOS and Android apps with a single JavaScript codebase and maximizes development efficiency by leveraging the powerful backend services provided by Firebase instead of building a server infrastructure from scratch.
+To get started with MyPetLibrary, follow these steps:
 
----
+1.  **Clone the repository (if applicable) or navigate to the project directory:**
 
-## **2. Project Structure (`/src` folder)**
+    ```bash
+    cd /Users/eddie/Projects/randomName
+    ```
 
-All of the project's core logic is located within the `/src` folder, and each directory has a clearly defined role according to its function. This 'Separation of Concerns' principle improves code readability and makes maintenance easier.
+2.  **Install dependencies:**
 
-*   **/screens:** Stores components corresponding to each page (screen) of the app. (e.g., `HomeScreen`, `LibraryScreen`)
-*   **/components:** Manages small, reusable UI unit components such as buttons, cards, and input fields that are used across multiple screens.
-*   **/navigation:** Defines and manages the navigation flow (routing) between screens within the app using the React Navigation library.
-*   **/services:** Handles all communication logic with Firebase. Functions for fetching information from the database or uploading photos to storage are located here.
-*   **/assets:** Stores static resources used in the app, such as logo images, icons, and custom fonts.
-*   **/constants:** Defines constant values that are used consistently throughout the app (e.g., theme color codes, API URLs).
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
----
+    This will install all the necessary packages, including `expo-image-picker`.
 
-## **3. Data Flow and Backend Architecture**
+## How to Run the App
 
-The app's data moves organically between the user's device and the Firebase backend.
+Once the dependencies are installed, you can run the app on your device or emulator:
 
-1.  **Name/Memo Data (Firestore):**
-    *   A vast list of 'recommended names' used in the app is pre-stored in the **Firestore database**.
-    *   The names and memo texts of pets that users save in their library are also systematically recorded in Firestore. Each pet's information is saved as a single 'Document'.
+-   **For Android:**
 
-2.  **Photo Files (Firebase Storage):**
-    *   Photo files taken by the user or selected from the gallery are uploaded directly to **Firebase Storage**. Storage is specifically designed for storing large files.
+    ```bash
+    npm run android
+    # or
+    yarn android
+    ```
 
-3.  **Integrated Data Flow:**
-    *   **When saving:** When a user saves a photo and a memo, ① the photo file is uploaded to **Storage**, and ② a unique download URL for the uploaded file is generated. ③ This URL address is recorded in a document in the **Firestore** database along with the animal's name and memo text.
-    *   **When viewing:** The library screen fetches the list of documents from Firestore. It displays the pet's information and image on the screen using the name, memo, and photo URL stored in each document.
+-   **For iOS:**
 
----
+    ```bash
+    npm run ios
+    # or
+    yarn ios
+    ```
 
-## **4. Main Libraries and Roles**
+-   **For Web (development server):**
 
-*   **React Native:** As the core framework, it allows you to build native mobile apps (iOS, Android) using JavaScript and React concepts.
-*   **React Navigation:** An essential library for managing screen transitions in the app. It controls the entire experience of a user moving to another page by pressing a button.
-*   **React Native Firebase:** Acts as a bridge connecting the React Native app with Firebase services. Through this library, you can call all the functions of Firestore and Storage from the app.
-*   **(TBD) Image Picker / Camera:** Community libraries like `react-native-image-picker` will be used to activate the user's camera or access the album.
+    ```bash
+    npm run web
+    # or
+    yarn web
+    ```
 
-As such, the **MyPetLibrary** project is designed based on a modern and efficient technology stack and a systematic structure. This solid foundation will help to flexibly cope with adding new features or expanding services in the future.
+    This will open the app in your web browser. Note that some features like image picking might behave differently on web compared to native.
+
+## Project Structure
+
+The project follows a standard Expo project structure with custom components and services:
+
+```
+/Users/eddie/Projects/randomName/
+├───.expo/
+├───.git/
+├───.vscode/
+├───app/
+│   ├───_layout.tsx         # Root layout for navigation (tabs and stack)
+│   ├───index.tsx           # Home screen (main entry point for tabs)
+
+│   └───LibraryScreen.tsx   # Screen to display saved pets
+├───assets/                 # Static assets like images and fonts
+├───node_modules/
+├───src/
+│   ├───constants/
+│   │   └───names.ts        # Data for pet names
+│   ├───screens/
+
+│   │   ├───HomeScreen.tsx
+│   │   └───LibraryScreen.tsx
+│   └───services/
+│       └───PetProvider.tsx # Context API for managing pet data
+├───App.tsx                 # (No longer used, replaced by app/index.tsx and app/_layout.tsx)
+├───app.json
+├───eslint.config.js
+├───package-lock.json
+├───package.json
+├───README.md               # This file
+└───tsconfig.json
+```
+
+## Contributing
+
+Feel free to contribute to this project by submitting issues or pull requests.
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE).

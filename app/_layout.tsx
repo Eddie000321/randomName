@@ -1,5 +1,10 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import { PetProvider } from "../src/services/PetProvider";
 
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <PetProvider>
+      <Slot />
+    </PetProvider>
+  );
 }
